@@ -6,8 +6,13 @@ import { lusitana } from '@/app/ui/fonts';
 import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
 import { fetchInvoicesPages } from '@/app/lib/data';
+import { Metadata } from 'next';
  
-export default async function Page(props:{
+export const metadata: Metadata = {
+  title: 'Invoices | Acme Dashboard',
+};
+
+export default async function Page(props: {
   searchParams?: Promise<{
     query?: string;
     page?: string;
@@ -17,6 +22,7 @@ export default async function Page(props:{
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchInvoicesPages(query);
+
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
@@ -26,7 +32,7 @@ export default async function Page(props:{
         <Search placeholder="Search invoices..." />
         <CreateInvoice />
       </div>
-      <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
+       <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
         <Table query={query} currentPage={currentPage} />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
